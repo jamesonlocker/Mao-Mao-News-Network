@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="HK in English">
+<meta name="theme-color" content="#1d6b50">
+<title>Hong Kong in English</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+img{max-width:100%}
+[hidden]{display:none!important}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+/* Layout: a single readable newspaper column, a sticky section bar, stories as quiet blocks separated by rules. Large type for easy reading. */
+:root {
+  --bg: #f4f6f4;
+  --surface: #ffffff;
+  --ink: #16211d;
+  --muted: #56655f;
+  --rule: #d5ddd9;
+  --accent: #1d6b50;        /* Hong Kong tram green */
+  --accent-soft: #e2efe9;
+  --down: #b3261e;
+  --up: #1d6b50;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --base: 19px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101614; --surface: #172019; --ink: #e8eee9; --muted: #9cafa6; --rule: #2a3631;
+    --accent: #6fcba5; --accent-soft: #1d2d26; --down: #f08a80; --up: #6fcba5; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101614; --surface: #172019; --ink: #e8eee9; --muted: #9cafa6; --rule: #2a3631;
+  --accent: #6fcba5; --accent-soft: #1d2d26; --down: #f08a80; --up: #6fcba5; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: var(--base); line-height: 1.6; }
+.wrap { max-width: 42rem; margin: 0 auto; padding-inline: 18px; padding-block: 0 4rem; }
+
+header.mast { padding-block: 1.75rem 1rem; display: grid; gap: .35rem; }
+.mast .kicker { font-family: var(--f-display); font-weight: 700; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.mast h1 { font-family: var(--f-display); font-stretch: 80%; font-weight: 800; font-size: clamp(2.1rem, 8vw, 3rem); line-height: 1; margin: 0; letter-spacing: -.01em; }
+.mast .date { font-family: var(--f-display); font-weight: 500; color: var(--muted); font-size: .95rem; }
+
+.glance { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; margin-block: .5rem 1rem; }
+.glance > div { background: var(--surface); padding: .8rem 1rem; display: grid; gap: .15rem; min-width: 0; }
+.glance .lbl { font-family: var(--f-display); font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.glance .val { font-family: var(--f-display); font-weight: 700; font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.glance .sub { font-size: .9rem; color: var(--muted); line-height: 1.4; }
+.down { color: var(--down); } .up { color: var(--up); }
+
+nav.sections { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--rule); margin-inline: -18px; padding: .6rem 18px; display: flex; gap: .5rem; overflow-x: auto; scrollbar-width: none; }
+nav.sections::-webkit-scrollbar { display: none; }
+nav.sections a { flex: none; font-family: var(--f-display); font-weight: 600; font-size: .85rem; text-decoration: none; color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: .35rem .8rem; }
+nav.sections a:hover, nav.sections a:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+.textsize { margin-left: auto; display: flex; gap: .35rem; flex: none; }
+.textsize button { font-family: var(--f-display); font-weight: 700; font-size: .85rem; min-width: 2.4rem; background: var(--accent-soft); color: var(--accent); border: 1px solid transparent; border-radius: 999px; padding: .35rem .6rem; cursor: pointer; }
+.textsize button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+section.sec { padding-top: 1.75rem; scroll-margin-top: 3.5rem; }
+section.sec > h2 { font-family: var(--f-display); font-stretch: 85%; font-weight: 800; font-size: 1.05rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin: 0 0 .25rem; padding-bottom: .5rem; border-bottom: 2px solid var(--accent); }
+
+article.story { padding-block: 1.1rem; border-bottom: 1px solid var(--rule); display: grid; gap: .45rem; }
+article.story:last-child { border-bottom: 0; }
+.story h3 { font-family: var(--f-display); font-weight: 700; font-size: 1.3rem; line-height: 1.25; margin: 0; text-wrap: balance; }
+.top .story h3 { font-size: 1.5rem; }
+.story p { margin: 0; }
+.meta { font-family: var(--f-display); font-size: .8rem; font-weight: 500; color: var(--muted); display: flex; flex-wrap: wrap; gap: .25rem .75rem; }
+.meta .src { font-weight: 700; color: var(--ink); }
+details { margin-top: .15rem; }
+summary { font-family: var(--f-display); font-weight: 600; font-size: .9rem; color: var(--accent); cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: .35rem; padding-block: .2rem; }
+summary::-webkit-details-marker { display: none; }
+summary::before { content: "+"; font-weight: 800; width: 1.1rem; height: 1.1rem; display: inline-grid; place-items: center; border-radius: 50%; background: var(--accent-soft); font-size: .85rem; }
+details[open] summary::before { content: "−"; }
+summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+details ul { margin: .5rem 0 .6rem; padding-left: 1.2rem; display: grid; gap: .35rem; }
+.orig { font-size: .85rem; color: var(--muted); border-left: 3px solid var(--rule); padding-left: .7rem; display: grid; gap: .15rem; }
+.orig a { color: var(--accent); font-family: var(--f-display); font-weight: 600; }
+
+footer { margin-top: 2.5rem; font-size: .85rem; color: var(--muted); line-height: 1.5; display: grid; gap: .5rem; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="kicker">Hong Kong local news, translated</div>
+    <h1>Hong Kong in English</h1>
+    <div class="date" id="edition-date"></div>
+  </header>
+
+  <div class="glance" id="glance"></div>
+
+  <nav class="sections" id="sections" aria-label="Sections">
+    <div class="textsize" role="group" aria-label="Text size">
+      <button type="button" id="smaller" aria-label="Smaller text">A−</button>
+      <button type="button" id="bigger" aria-label="Larger text">A+</button>
+    </div>
+  </nav>
+
+  <main id="stories"></main>
+
+  <footer>
+    <div id="sources-line"></div>
+    <div>Stories are translated and summarised automatically from Chinese-language reports. Names of people and places follow their usual English spellings where one exists. Tap "Original report" to see the source article.</div>
+  </footer>
+</div>
+
+<!-- EDITION DATA: the daily refresh replaces only the JSON inside this script tag. -->
+<script id="edition" type="application/json">
+{
+  "date": "2026-09-29",
+  "dateLabel": "Tuesday, 29 September 2026",
+  "updated": "Evening edition · updated 6:45 pm HKT",
+  "glance": [
+    {"label": "Weather", "value": "Very hot · 33°C", "sub": "Mostly fine, a few showers", "trend": ""},
+    {"label": "Hang Seng Index", "value": "24,523 ▼118", "sub": "−0.48% at the close", "trend": "down"},
+    {"label": "Coming up", "value": "National Day, Thu 1 Oct", "sub": "Public holiday · busy border crossings through Sun 4 Oct", "trend": ""}
+  ],
+  "sections": [
+    {"id": "top", "name": "Top stories"},
+    {"id": "life", "name": "Hong Kong life"},
+    {"id": "crime", "name": "Crime & scams"},
+    {"id": "gov", "name": "Government & politics"},
+    {"id": "money", "name": "Money & markets"},
+    {"id": "sport", "name": "Sport & culture"}
+  ],
+  "stories": [
+    {
+      "section": "top",
+      "headline": "iPhone pre-order fraud: 1,503 cases worth over HK$30 million, all orders cancelled",
+      "summary": "Criminals used stolen credit card details to place mass orders for the new iPhone after Apple switched off an online payment check. Police say every order has been cancelled, so no cardholder, bank or Apple lost money. Separately, fraud now makes up half of all crime in Hong Kong for the first time.",
+      "details": [
+        "Police Commissioner Joe Chow said Apple had turned off extra card verification for online orders, and has asked Apple to review this before another phone goes on pre-sale in mid-October.",
+        "The fraudsters gave false or incomplete delivery details, then redirected parcels to public places where runners collected them.",
+        "Hong Kong recorded 59,213 crimes from January to August, up 0.2%. Fraud cases rose 4.5% to 29,670, with losses of HK$5.21 billion.",
+        "Phone scams are now the biggest category (27% of fraud), mostly callers pretending to be customer service staff. Three-quarters of these calls come from local numbers."
+      ],
+      "source": "RTHK", "time": "2:51 pm",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1871997-20260929.htm",
+      "zh": "警接1503宗購iPhone騙案涉款逾3千萬　所有交易已取消"
+    },
+    {
+      "section": "top",
+      "headline": "Row over nurse jobs: caller hits back after Executive Council member said unions were 'pretending'",
+      "summary": "A psychiatric nurse who phoned a radio show to tell Chief Executive John Lee that imported mainland nurses were taking local jobs says he belongs to no union. Executive Council member Tommy Cheung had suggested such callers were union members in disguise. The government says 99.8% of Hospital Authority registered nurses were trained locally.",
+      "details": [
+        "The caller, Mr Kwok, said his daughter is a newly graduated psychiatric nurse who had a Zoom interview with the Hospital Authority and never heard back.",
+        "Tommy Cheung told the Hong Kong Economic Journal that callers were 'all unions, possibly pretending to be ordinary people', and that he fully backed importing nurses.",
+        "The Association of Hong Kong Nursing Staff expressed regret, and a Federation of Hong Kong and Kowloon Labour Unions nurses' group demanded an apology.",
+        "Health Secretary Lo Chung-mau says the Hospital Authority still has more than 3,200 nursing vacancies, and about 99% of qualified applicants who finished the recruitment process were hired."
+      ],
+      "source": "Inmedia", "time": "11:49 am",
+      "url": "https://www.inmediahk.net/node/%E6%94%BF%E7%B6%93/%E5%B8%82%E6%B0%91%E5%8F%8D%E9%A7%81%E5%BC%B5%E5%AE%87%E4%BA%BA%E3%80%8C%E6%89%AE%E4%BA%BA%E6%89%93%E9%9B%BB%E8%A9%B1%E3%80%8D%E8%AB%96%EF%BC%9A%E4%BD%A2%E5%BF%83%E7%9B%AE%E4%B8%AD%E6%9F%90%E5%95%B2%E9%9A%8E%E5%B1%A4%E4%B8%8D%E9%85%8D%E5%81%9A%E4%BA%BA%E9%A1%9E",
+      "zh": "市民反駁張宇人「扮人打電話」論：佢心目中某啲階層不配做人類"
+    },
+    {
+      "section": "top",
+      "headline": "Wang Fuk Court owners begin choosing replacement flats",
+      "summary": "Owners at Wang Fuk Court in Tai Po, the estate hit by last year's major fire, started picking new flats today under a special sale scheme. The first 35 or so households were invited, and all selections should be finished by the end of November.",
+      "details": [
+        "99.3% of owners (1,971 households in Blocks A to H) accepted the government's offer to buy back their flats. About 1,700 chose the special sale scheme.",
+        "More than 4,400 flats in 10 public housing projects have been set aside, in Kowloon Bay, Kai Tak, Kam Tin, Tseung Kwan O, Ping Shan, Tung Chung, Tai Po, Fanling and Kwun Tong.",
+        "Flats range from about 280 to 560 square feet. Around 2,800 are 400 sq ft or larger.",
+        "The order of selection was set by a random computer draw."
+      ],
+      "source": "RTHK", "time": "2:59 pm",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1872000-20260929.htm",
+      "zh": "宏福苑業主「特設銷售計劃」今起揀樓　料11月底完成"
+    },
+
+    {
+      "section": "life",
+      "headline": "Golden Week: expect long queues coming back into Hong Kong on Sunday afternoon",
+      "summary": "The government expects the peak of travellers returning through land border crossings on Sunday 4 October, from afternoon to evening. The Transport Department advises avoiding peak times and allowing extra travel time.",
+      "details": [
+        "Waits may be long for the Hong Kong-Zhuhai-Macao Bridge shuttle bus and B-route buses.",
+        "Traffic around the Zhuhai port is very heavy on holiday peaks since a temporary bridge was closed. Public transport is recommended."
+      ],
+      "source": "RTHK", "time": "3:02 pm",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1872001-20260929.htm",
+      "zh": "政府料周日下午至傍晚將是回港高峰　公共運輸服務等候時間較長"
+    },
+    {
+      "section": "life",
+      "headline": "First 'Hong Kong Halloween Month': street parties on three Saturdays in October",
+      "summary": "The Tourism Board will hold Halloween street parties on 17, 24 and 31 October at Chater Road in Central, Kai Tak Sports Park, Lan Kwai Fong, outside Langham Place in Mong Kok, and Mody Road Garden in Tsim Sha Tsui.",
+      "details": [
+        "Events include electronic music, cosplay and Cantopop performances.",
+        "On those Saturday nights, anyone in Halloween costume can ride a Citybus open-top Halloween tour route and two 'party trams' for free."
+      ],
+      "source": "RTHK", "time": "3:13 pm",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1872004-20260929.htm",
+      "zh": "旅發局首辦「香港萬聖月」　下月多個旅遊熱點舉行街頭派對"
+    },
+    {
+      "section": "life",
+      "headline": "Hospital meals and laundry now made in one central facility",
+      "summary": "The Hospital Authority's new support centre runs a central kitchen and laundry. It already cooks patient meals for 15 public hospitals and will serve 23 by the end of the year.",
+      "details": [
+        "The kitchen can make 14.7 million patient meals a year. The laundry handles 33 million kg of linen a year.",
+        "AI X-ray machines check food and linen for foreign objects and sharp items."
+      ],
+      "source": "RTHK", "time": "11:43 am",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1871975-20260929.htm",
+      "zh": "醫管局支援服務中心使用量至今年底可達近七成"
+    },
+    {
+      "section": "life",
+      "headline": "Yuen Long dog attack: 8 dogs caught, government denies rumours they will be put down in 4 days",
+      "summary": "After a suspected fatal dog attack in Yuen Long on 19 September, officers caught eight unattended dogs. The agriculture department says the four-day period is only the legal time to find an owner, not a deadline for putting dogs down.",
+      "details": [
+        "Three of the dogs had microchips but expired licences. One registered keeper, the founder of a dog rescue group, is being prosecuted.",
+        "Healthy, gentle dogs are passed to animal welfare groups for rehoming. The department says it will not release ownerless dogs back into the community.",
+        "One officer was bitten on the hand during the operation."
+      ],
+      "source": "Inmedia", "time": "Fri 25 Sep",
+      "url": "https://www.inmediahk.net/node/%E5%8B%95%E7%89%A9/%E3%80%90%E5%85%83%E6%9C%97%E7%8B%97%E5%92%AC%E4%BA%BA%E3%80%91%E6%BC%81%E8%AD%B7%E7%BD%B2%E6%8D%95%E5%85%AB%E7%8B%97-%E6%89%B9%E5%9D%8A%E9%96%93%E6%B5%81%E8%A8%80%E6%92%B2%E6%AE%BA%E7%8B%97%E9%9A%BB%E4%B8%A6%E9%9D%9E%E4%BA%8B%E5%AF%A6",
+      "zh": "【元朗狗咬人】漁護署捕八狗  批坊間流言撲殺狗隻並非事實"
+    },
+
+    {
+      "section": "crime",
+      "headline": "Retired woman, 71, loses nearly HK$2.9 million to online romance scam",
+      "summary": "She met a man on Facebook who claimed to work for a power company. He talked her into a fake investment app, then claimed he had been arrested in Singapore and needed bail money. She transferred money 17 times, borrowing from friends and a lender.",
+      "details": [
+        "The scam came to light when a finance company chased her for repayment and she asked her daughter for help.",
+        "Police received at least 18 romance scam reports in the past week, with total losses near HK$7.8 million.",
+        "Warning signs: someone you have never met asks you to download an investment app, transfer money, or pay 'bail' abroad."
+      ],
+      "source": "RTHK", "time": "3:56 pm",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1872012-20260929.htm",
+      "zh": "71歲退休女子疑墮網上情緣騙案　損失近290萬元"
+    },
+    {
+      "section": "crime",
+      "headline": "Police plan rooftop drone bases at stations across Hong Kong",
+      "summary": "Police will install automatic drone docks on police stations and some government buildings, with a central system to coordinate patrols. Testing starts on Hong Kong Island this quarter. Online investment scams fell by a third in the first eight months.",
+      "details": [
+        "The Commissioner said the terrorism threat level remains 'moderate'.",
+        "Police will keep cracking down on electric scooters and illegally modified bicycles, and the government intends to change the law to regulate them."
+      ],
+      "source": "RTHK", "time": "4:53 pm",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1872018-20260929.htm",
+      "zh": "今年首八個月網上投資騙案下跌　周一鳴稱警方宣傳工作似乎有成效"
+    },
+    {
+      "section": "crime",
+      "headline": "Man ambushed and hit with bottles in Tsim Sha Tsui after a night out",
+      "summary": "A man was attacked by several people with glass bottles after a night out in Tsim Sha Tsui. He suffered head wounds and was taken to hospital.",
+      "details": [],
+      "source": "HK01", "time": "Today",
+      "url": "https://www.hk01.com/%E7%AA%81%E7%99%BC/60394668/",
+      "zh": "尖沙咀男子消遣後被數人埋伏「爆樽」 頭破血流送院治理"
+    },
+    {
+      "section": "crime",
+      "headline": "Traveller caught with a live endangered turtle in his trouser pocket",
+      "summary": "Customs officers at the Lok Ma Chau Spur Line checkpoint found a live turtle, worth about HK$10,000, in the pocket of a 24-year-old man. It is believed to be a protected endangered species.",
+      "details": ["Importing endangered species without a licence can bring a fine of up to HK$10 million and 10 years in jail."],
+      "source": "RTHK", "time": "5:35 pm",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1872024-20260929.htm",
+      "zh": "海關落馬洲檢獲一隻非法進口瀕危物種活龜　市值約一萬元"
+    },
+
+    {
+      "section": "gov",
+      "headline": "National Day on Thursday: flag-raising at Golden Bauhinia Square, no public viewing area",
+      "summary": "Chief Executive John Lee and senior officials will attend the 8 am flag-raising ceremony on 1 October in Wan Chai, marking the 77th anniversary of the People's Republic of China. There will be no public viewing area, and special traffic arrangements will apply nearby.",
+      "details": ["A government reception follows at the Convention and Exhibition Centre."],
+      "source": "RTHK", "time": "4:05 pm",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1872013-20260929.htm",
+      "zh": "李家超與政府高層官員周四將出席國慶升旗儀式和酒會"
+    },
+    {
+      "section": "gov",
+      "headline": "Tai Po councillor resigns on health grounds after fake proxy form claims",
+      "summary": "Tai Po district councillor Wong Pik-kiu resigned after missing nine meetings in a row. Her team is linked to at least three Wang Fuk Court proxy voting forms that may have come from owners who had died. Home Affairs Secretary Alice Mak said the health reason is private.",
+      "details": [
+        "The case has been passed to law enforcement.",
+        "Whether there will be a by-election is undecided. The government cites three major elections coming up: the Election Committee in November, and district council and Chief Executive elections next year."
+      ],
+      "source": "Inmedia", "time": "Sun 27 Sep",
+      "url": "https://www.inmediahk.net/node/%E6%94%BF%E7%B6%93/%E9%BB%83%E7%A2%A7%E5%AC%8C%E8%AB%8B%E8%BE%AD-%E9%BA%A5%E7%BE%8E%E5%A8%9F%EF%BC%9A%E5%81%A5%E5%BA%B7%E7%90%86%E7%94%B1%E5%B1%AC%E7%97%85%E4%BA%BA%E7%A7%81%E9%9A%B1-%E4%B8%8D%E6%9C%83%E9%80%8F%E9%9C%B2",
+      "zh": "黃碧嬌請辭 麥美娟：健康理由屬病人私隱 不會透露"
+    },
+    {
+      "section": "gov",
+      "headline": "Registered voters fall for a fifth straight year",
+      "summary": "Hong Kong now has about 4.12 million registered voters for geographical constituencies, down 22,000 on last year and 355,000 below the 2021 peak. Young voters have dropped sharply.",
+      "details": [
+        "Voters aged 18 to 25 fell to about 153,000, compared with 370,000 in 2020.",
+        "Voters aged 18 to 20 fell to about 12,000, down 90% from 2020."
+      ],
+      "source": "Inmedia", "time": "Fri 25 Sep",
+      "url": "https://www.inmediahk.net/node/%E6%94%BF%E7%B6%93/%E5%9C%B0%E6%96%B9%E9%81%B8%E5%8D%80%E9%81%B8%E6%B0%91%E4%BA%BA%E6%95%B8%E5%86%8D%E8%B7%8C-2022%E5%B9%B4%E8%B5%B7%E9%80%A3%E8%B7%8C%E4%BA%94%E5%B9%B4",
+      "zh": "地方選區選民人數再跌 2022年起連跌五年"
+    },
+    {
+      "section": "gov",
+      "headline": "John Lee: Hong Kong's first five-year plan centres on serving national development",
+      "summary": "Speaking to a forum by video, the Chief Executive said the plan links Hong Kong to the mainland's 15th Five-Year Plan, deepens Greater Bay Area ties, and builds global partnerships.",
+      "details": [],
+      "source": "RTHK", "time": "11:41 am",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1871974-20260929.htm",
+      "zh": "李家超稱香港五年規劃主軸是融入和服務國家發展大局"
+    },
+    {
+      "section": "gov",
+      "headline": "Company banned from importing workers for two years for turning away local job seeker",
+      "summary": "The Labour Department suspended a company's applications under the labour import scheme after finding it refused, without good reason, to hire a qualified local applicant for a general clerk job.",
+      "details": [],
+      "source": "RTHK", "time": "1:08 pm",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1871987-20260929.htm",
+      "zh": "三有有限公司違反「補充勞工優化計劃」本地招聘規定被行政制裁"
+    },
+
+    {
+      "section": "money",
+      "headline": "Hang Seng falls 118 points; car makers slide, mainland property stocks rise",
+      "summary": "The Hang Seng Index closed at 24,523, down 0.48%, on futures settlement day. The tech index lost 1.08%. Geely fell more than 7%, while Longfor rose nearly 6%.",
+      "details": [
+        "Turnover on the main board was HK$184.6 billion.",
+        "Four new listings debuted: two rose and two fell."
+      ],
+      "source": "RTHK", "time": "4:45 pm",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1872015-20260929.htm",
+      "zh": "港股收市跌118點　科技股下跌　內房股逆市造好"
+    },
+    {
+      "section": "money",
+      "headline": "Interbank rates stay above 3%; analyst sees a dip after quarter-end",
+      "summary": "One-month HIBOR, which affects many mortgages, is about 3.02%. The 12-month rate is close to 4%. A DBS strategist expects rates to ease back toward 2.7% after the quarter ends.",
+      "details": [
+        "She expects the US Federal Reserve may raise rates once more this year, and Hong Kong banks would then lift their prime rate by 0.125 percentage points.",
+        "The Hong Kong dollar was slightly weaker, at about 7.845 to the US dollar."
+      ],
+      "source": "RTHK", "time": "12:30 pm",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1871981-20260929.htm",
+      "zh": "分析料季結後港元拆息或回落至2.7厘水平"
+    },
+    {
+      "section": "money",
+      "headline": "Mainland China to subsidise first-home mortgage interest from 1 October",
+      "summary": "Beijing will pay 1 percentage point of interest a year, for up to 5 years, on new mortgages up to RMB 1 million for first homes of 120 square metres or less priced at RMB 1.5 million or below. The central bank also cut a key lending rate.",
+      "details": ["The People's Bank of China cut its pledged supplementary lending rate by 0.25 points to 1.5% and added cheap loan quotas for tech firms and small businesses."],
+      "source": "RTHK", "time": "6:30 pm",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1872032-20260929.htm",
+      "zh": "內地10月1日起實施居民房貸貼息　貼息1個百分點"
+    },
+    {
+      "section": "money",
+      "headline": "Australia raises interest rates to 4.6%, a 15-year high",
+      "summary": "Australia's central bank lifted rates by 0.25 points, citing high inflation and energy prices pushed up by conflict in the Middle East.",
+      "details": [],
+      "source": "RTHK", "time": "12:58 pm",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1871984-20260929.htm",
+      "zh": "澳洲加息0.25厘符合預期　央行稱短期通脹預期指標仍高企"
+    },
+
+    {
+      "section": "sport",
+      "headline": "Asian Games: bronze in track cycling, Coleman Wong into tennis last 16",
+      "summary": "Hong Kong's men's team sprint cyclists beat Malaysia by more than 0.8 seconds to take bronze. Top seed Coleman Wong won 6-4, 6-1 to reach the third round of the men's singles.",
+      "details": ["Hong Kong's Chu Kai-wang lost his second-round match to Japan's eighth seed."],
+      "source": "RTHK", "time": "3:51 pm",
+      "url": "https://news.rthk.hk/rthk/ch/component/k2/1872010-20260929.htm",
+      "zh": "亞運場地單車男子團體競速賽　港隊擊敗馬來西亞取得銅牌"
+    },
+    {
+      "section": "sport",
+      "headline": "Hong Kong football team beats Laos 4-0 at Kai Tak",
+      "summary": "In the FIFA ASEAN Cup, Sun Ming-him opened the scoring and Hong Kong won comfortably in front of 18,873 fans. The team plays Brunei on Wednesday night.",
+      "details": [],
+      "source": "Inmedia", "time": "Sun 27 Sep",
+      "url": "https://www.inmediahk.net/node/%E9%AB%94%E8%82%B2/%E3%80%90%E6%9D%B1%E7%9B%9F%E7%9B%83%E3%80%91%E6%B8%AF%E8%B6%B3%E5%9B%9B%E7%90%83%E8%BC%95%E5%8F%96%E8%80%81%E6%92%BE-%E7%9B%A7%E6%AF%94%E5%BA%A6%E6%84%9F%E6%BB%BF%E6%84%8F%EF%BC%9A%E6%84%9F%E8%AC%9D%E7%90%83%E8%BF%B7%E5%85%A5%E5%A0%B4%E6%94%AF%E6%8C%81",
+      "zh": "【東盟盃】港足四球輕取老撾 盧比度感滿意：感謝球迷入場支持"
+    },
+    {
+      "section": "sport",
+      "headline": "Victoria Park tennis stadium to be rebuilt with a retractable roof",
+      "summary": "Culture Secretary Rosanna Law hopes work will start within four years, so Hong Kong can host bigger ATP tournaments. The nearby swimming pool and football pitches should mostly be left alone.",
+      "details": ["During the rebuild, tennis events would move temporarily to Hong Kong Stadium."],
+      "source": "Inmedia", "time": "Mon 28 Sep",
+      "url": "https://www.inmediahk.net/node/%E6%94%BF%E7%B6%93/%E9%87%8D%E5%BB%BA%E7%B6%AD%E5%9C%92%E7%B6%B2%E7%90%83%E5%A0%B4%E5%86%80%E5%9B%9B%E5%B9%B4%E5%85%A7%E5%8B%95%E5%B7%A5-%E7%BE%85%E6%B7%91%E4%BD%A9%EF%BC%9A%E7%9B%A1%E9%87%8F%E5%94%94%E9%83%81%E7%A1%AC%E5%9C%B0%E8%B6%B3%E7%90%83%E5%A0%B4",
+      "zh": "重建維園網球場冀四年內動工  羅淑佩：盡量唔郁硬地足球場"
+    }
+  ]
+}
+</script>
+
+<script>
+(function () {
+  var data = JSON.parse(document.getElementById('edition').textContent);
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+
+  document.getElementById('edition-date').textContent = data.dateLabel + ' · ' + data.updated;
+
+  document.getElementById('glance').innerHTML = data.glance.map(function (g) {
+    return '<div><span class="lbl">' + esc(g.label) + '</span><span class="val ' + (g.trend || '') + '">' + esc(g.value) + '</span><span class="sub">' + esc(g.sub) + '</span></div>';
+  }).join('');
+
+  var nav = document.getElementById('sections');
+  var sizeCtl = nav.querySelector('.textsize');
+  var main = document.getElementById('stories');
+  var used = data.sections.filter(function (s) { return data.stories.some(function (st) { return st.section === s.id; }); });
+
+  used.forEach(function (s) {
+    var a = document.createElement('a');
+    a.href = '#' + s.id; a.textContent = s.name;
+    nav.insertBefore(a, sizeCtl);
+
+    var items = data.stories.filter(function (st) { return st.section === s.id; });
+    var sec = document.createElement('section');
+    sec.className = 'sec ' + s.id; sec.id = s.id;
+    sec.innerHTML = '<h2>' + esc(s.name) + '</h2>' + items.map(function (st) {
+      var more = (st.details && st.details.length) ? '<ul>' + st.details.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul>' : '';
+      return '<article class="story">' +
+        '<h3>' + esc(st.headline) + '</h3>' +
+        '<div class="meta"><span class="src">' + esc(st.source) + '</span><span>' + esc(st.time) + '</span></div>' +
+        '<p>' + esc(st.summary) + '</p>' +
+        '<details><summary>' + (more ? 'More detail' : 'Original report') + '</summary>' + more +
+          '<div class="orig"><span>' + esc(st.zh) + '</span><a href="' + esc(st.url) + '" target="_blank" rel="noopener">Original report (Chinese) ↗</a></div>' +
+        '</details>' +
+      '</article>';
+    }).join('');
+    main.appendChild(sec);
+  });
+
+  var srcs = [];
+  data.stories.forEach(function (st) { if (srcs.indexOf(st.source) < 0) srcs.push(st.source); });
+  document.getElementById('sources-line').textContent = data.stories.length + ' stories today from ' + srcs.join(', ') + '.';
+
+  var sizes = [17, 19, 21, 23, 26], idx = 1;
+  try { var saved = parseInt(localStorage.getItem('hk-en-size'), 10); if (saved >= 0 && saved < sizes.length) idx = saved; } catch (e) {}
+  function apply() {
+    document.documentElement.style.setProperty('--base', sizes[idx] + 'px');
+    try { localStorage.setItem('hk-en-size', String(idx)); } catch (e) {}
+  }
+  document.getElementById('bigger').addEventListener('click', function () { if (idx < sizes.length - 1) { idx++; apply(); } });
+  document.getElementById('smaller').addEventListener('click', function () { if (idx > 0) { idx--; apply(); } });
+  apply();
+})();
+</script>
+
+</body>
+</html>
