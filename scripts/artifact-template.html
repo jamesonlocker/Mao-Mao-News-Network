@@ -111,7 +111,7 @@ details.seen-group > summary { font-size: 1rem; color: var(--muted); }
 
   <footer>
     <div id="sources-line"></div>
-    <div>Stories are translated and summarised automatically from Chinese-language reports. Names of people and places follow their usual English spellings where one exists. Tap "Original report" to see the source article. Stories you have already scrolled past move to the bottom on your next visit; this is remembered only on this device.</div>
+    <div>Stories are summarised automatically, and translated from Chinese-language reports where needed. Names of people and places follow their usual English spellings where one exists. Tap "Original report" to see the source article. Stories you have already scrolled past move to the bottom on your next visit; this is remembered only on this device.</div>
   </footer>
 </div>
 
@@ -556,6 +556,8 @@ details.seen-group > summary { font-size: 1rem; color: var(--muted); }
     if (status === 'earlier' || (status !== 'update' && seenBefore(st))) later.push(st); else fresh.push(st);
   });
 
+  function isEnglish(st) { return st.source === 'The Standard'; }
+
   function card(st, inGroup) {
     var status = st.status || 'new';
     var badge = inGroup ? '' : status === 'update' ? '<span class="badge update">Update</span>' : status === 'new' ? '<span class="badge new">New</span>' : '';
@@ -565,7 +567,9 @@ details.seen-group > summary { font-size: 1rem; color: var(--muted); }
       '<div class="meta">' + badge + '<span class="src">' + esc(st.source) + '</span><span>' + esc(st.time) + '</span></div>' +
       '<p>' + esc(st.summary) + '</p>' +
       '<details><summary>' + (more ? 'More detail' : 'Original report') + '</summary>' + more +
-        '<div class="orig"><span>' + esc(st.zh) + '</span><a href="' + esc(st.url) + '" target="_blank" rel="noopener">Original report (Chinese) ↗</a></div>' +
+        (isEnglish(st)
+          ? '<div class="orig"><a href="' + esc(st.url) + '" target="_blank" rel="noopener">Original report (English) ↗</a></div>'
+          : '<div class="orig"><span>' + esc(st.zh) + '</span><a href="' + esc(st.url) + '" target="_blank" rel="noopener">Original report (Chinese) ↗</a></div>') +
       '</details>' +
     '</article>';
   }
