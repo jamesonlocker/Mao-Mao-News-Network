@@ -87,6 +87,27 @@ details.seen-group > summary { font-size: 1rem; color: var(--muted); }
 .seen-group article.story h3 { font-size: 1.1rem; color: var(--muted); }
 .seen-group .story p { color: var(--muted); }
 .seen-label { font-family: var(--f-display); font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+/* Quotes */
+blockquote.quote { margin: .2rem 0 0; padding: .55rem .9rem; border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 8px 8px 0; display: grid; gap: .25rem; }
+blockquote.quote p { font-style: italic; margin: 0; }
+blockquote.quote cite { font-family: var(--f-display); font-style: normal; font-size: .78rem; font-weight: 600; color: var(--muted); }
+/* Explainers */
+span.term { cursor: pointer; text-decoration: underline dotted var(--accent); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+span.term:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+#gloss-sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--surface); border-top: 1px solid var(--rule); box-shadow: 0 -8px 24px rgba(0,0,0,.12); padding: 1rem 18px calc(1rem + env(safe-area-inset-bottom, 0px)); }
+#gloss-sheet .inner { max-width: 42rem; margin: 0 auto; display: grid; gap: .35rem; }
+#gloss-sheet .gt { font-family: var(--f-display); font-weight: 800; font-size: 1.1rem; display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+#gloss-sheet button.close { font-family: var(--f-display); font-weight: 700; font-size: .85rem; background: var(--accent-soft); color: var(--accent); border: 0; border-radius: 999px; padding: .3rem .8rem; cursor: pointer; flex: none; }
+#gloss-sheet p { margin: 0; }
+/* Past editions */
+.past { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
+.past button { font-family: var(--f-display); font-weight: 600; font-size: .82rem; background: var(--surface); color: var(--ink); border: 1px solid var(--rule); border-radius: 999px; padding: .3rem .75rem; cursor: pointer; }
+.past button[aria-pressed="true"] { background: var(--accent); color: var(--surface); border-color: var(--accent); }
+.past button:disabled { opacity: .4; cursor: default; }
+.past button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pastlbl { font-family: var(--f-display); font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-right: .2rem; }
+.archive-note { font-family: var(--f-display); font-size: .92rem; font-weight: 600; background: var(--update-soft); color: var(--update); border-radius: 10px; padding: .7rem 1rem; margin-block: 0 .5rem; display: flex; flex-wrap: wrap; gap: .5rem 1rem; justify-content: space-between; align-items: center; }
+.archive-note button { font: inherit; font-size: .85rem; background: var(--surface); color: var(--update); border: 1px solid currentColor; border-radius: 999px; padding: .25rem .75rem; cursor: pointer; }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 </style>
 
@@ -95,6 +116,7 @@ details.seen-group > summary { font-size: 1rem; color: var(--muted); }
     <div class="kicker">Hong Kong local news, translated</div>
     <h1>Hong Kong in English</h1>
     <div class="date" id="edition-date"></div>
+    <div class="past" id="past" role="group" aria-label="Past editions"><span class="pastlbl">Editions</span></div>
   </header>
 
   <div class="glance" id="glance"></div>
@@ -106,14 +128,17 @@ details.seen-group > summary { font-size: 1rem; color: var(--muted); }
     </div>
   </nav>
 
+  <div class="archive-note" id="archive-note" hidden></div>
   <div class="catchup" id="catchup" hidden></div>
   <main id="stories"></main>
 
   <footer>
     <div id="sources-line"></div>
-    <div>Stories are summarised automatically, and translated from Chinese-language reports where needed. Names of people and places follow their usual English spellings where one exists. Tap "Original report" to see the source article. Stories you have already scrolled past move to the bottom on your next visit; this is remembered only on this device.</div>
+    <div>Stories are summarised automatically, and translated from Chinese-language reports where needed. Names of people and places follow their usual English spellings where one exists. Tap an underlined name or term for a short explanation, or "Original report" to see the source article. Stories you have already scrolled past move to the bottom on your next visit; this is remembered only on this device.</div>
   </footer>
 </div>
+
+<div id="gloss-sheet" role="dialog" aria-modal="false" aria-labelledby="gloss-term" hidden><div class="inner"><div class="gt"><span id="gloss-term"></span><button type="button" class="close" id="gloss-close">Close</button></div><p id="gloss-text"></p></div></div>
 
 <!-- EDITION DATA: the daily refresh replaces only the JSON inside this script tag. -->
 <script id="edition" type="application/json">
@@ -213,7 +238,17 @@ details.seen-group > summary { font-size: 1rem; color: var(--muted); }
       "time": "Tue 29 Sep",
       "url": "https://www.inmediahk.net/node/%E6%94%BF%E7%B6%93/%E5%B8%82%E6%B0%91%E5%8F%8D%E9%A7%81%E5%BC%B5%E5%AE%87%E4%BA%BA%E3%80%8C%E6%89%AE%E4%BA%BA%E6%89%93%E9%9B%BB%E8%A9%B1%E3%80%8D%E8%AB%96%EF%BC%9A%E4%BD%A2%E5%BF%83%E7%9B%AE%E4%B8%AD%E6%9F%90%E5%95%B2%E9%9A%8E%E5%B1%A4%E4%B8%8D%E9%85%8D%E5%81%9A%E4%BA%BA%E9%A1%9E",
       "zh": "市民反駁張宇人「扮人打電話」論：佢心目中某啲階層不配做人類",
-      "status": "earlier"
+      "status": "earlier",
+      "quotes": [
+        {
+          "who": "Tommy Cheung, Executive Council member, to the Hong Kong Economic Journal",
+          "text": "These are all unions. They could easily be pretending to be ordinary people calling in. Everyone knows there aren't enough nurses. I'm not afraid to say it: I back the government all the way!"
+        },
+        {
+          "who": "Mr Kwok, the caller, on Commercial Radio",
+          "text": "I called in simply as an ordinary citizen, 'pretending to be a person'. Maybe in Tommy Cheung's mind, certain classes, the working class, ordinary employees, don't count as people, so if they want to speak up they have to pretend."
+        }
+      ]
     },
     {
       "section": "life",
@@ -525,123 +560,238 @@ details.seen-group > summary { font-size: 1rem; color: var(--muted); }
       "zh": "亞運場地單車男子團體競速賽　港隊擊敗馬來西亞取得銅牌",
       "status": "earlier"
     }
-  ]
+  ],
+  "glossary": {
+    "Executive Council": "The Chief Executive's inner cabinet of senior officials and appointed advisers. Members are often called 'ExCo members'.",
+    "Legislative Council": "Hong Kong's 90-seat legislature ('LegCo'). Since 2021, only 20 seats are directly elected by the public.",
+    "district council": "Local councils covering Hong Kong's 18 districts. They advise on neighbourhood matters; since 2023 most members are appointed or chosen by committees.",
+    "Chief Executive": "Hong Kong's head of government, chosen by a 1,500-member Election Committee. Currently John Lee.",
+    "Chief Secretary": "The most senior official after the Chief Executive, overseeing many government departments. Currently Eric Chan.",
+    "John Lee": "Hong Kong's Chief Executive (head of government) since 2022, and a former Security Secretary.",
+    "Tommy Cheung": "A member of the Executive Council and long-time pro-business politician from the Liberal Party, formerly representing the catering industry in the legislature.",
+    "Joe Chow": "Commissioner of Police, the head of the Hong Kong Police Force.",
+    "Lo Chung-mau": "Secretary for Health, responsible for public hospitals and health policy.",
+    "Eric Chan": "Chief Secretary for Administration, Hong Kong's second-highest official.",
+    "Chris Tang": "Secretary for Security, overseeing the police, immigration, customs and border crossings.",
+    "Bernadette Linn": "Secretary for Development, responsible for land, planning and buildings.",
+    "Hospital Authority": "The public body that runs Hong Kong's public hospitals and clinics, where most residents get their healthcare.",
+    "subdivided flat": "A normal flat split into several very small units, often without a proper kitchen or bathroom. Home to more than 200,000 of Hong Kong's poorest residents.",
+    "public housing estate": "Government-built housing with low rents for lower-income families. Nearly half of Hong Kong's population lives in public housing.",
+    "Wang Fuk Court": "A subsidised housing estate in Tai Po. A deadly fire there in November 2025 was one of Hong Kong's worst in decades, and the government is buying back owners' flats.",
+    "HIBOR": "The Hong Kong Interbank Offered Rate: the interest rate banks charge each other. Many Hong Kong mortgages are tied to it, so when HIBOR rises, monthly payments rise.",
+    "prime rate": "The base lending rate set by each Hong Kong bank. Some mortgages are priced against it instead of HIBOR.",
+    "Hang Seng Index": "Hong Kong's main stock market index, tracking the biggest listed companies.",
+    "Golden Week": "The mainland Chinese week-long holiday starting 1 October, when large numbers of mainland visitors come to Hong Kong and many Hong Kongers travel north.",
+    "National Day": "1 October, marking the founding of the People's Republic of China in 1949. A public holiday in Hong Kong.",
+    "Greater Bay Area": "Beijing's plan to link Hong Kong, Macau and nine cities in Guangdong province into one integrated economic region.",
+    "Five-Year Plan": "A long-term development blueprint. Mainland China has used them for decades; Hong Kong published its first in 2026.",
+    "Huanggang": "A road border crossing between Lok Ma Chau in Hong Kong and Futian in Shenzhen, being rebuilt so travellers clear both sides' checks in one building.",
+    "Lok Ma Chau": "An area on Hong Kong's northern border with Shenzhen, with several major border crossings.",
+    "Urban Renewal Authority": "A government-backed body that redevelops old neighbourhoods and helps owners repair ageing buildings.",
+    "community living room": "Government-funded shared spaces where families in subdivided flats can cook, wash, study and relax.",
+    "Food and Environmental Hygiene Department": "The department in charge of food safety, restaurant licences, markets, street cleaning and pest control.",
+    "labour import scheme": "A government scheme letting employers hire workers from outside Hong Kong, but only if they first try to fill jobs locally."
+  }
 }
 </script>
 
 <script>
 (function () {
-  var data = JSON.parse(document.getElementById('edition').textContent);
+  var today = JSON.parse(document.getElementById('edition').textContent);
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
-  var now = Date.now(), DAY = 864e5;
+  var DAY = 864e5;
 
   /* ---- per-device memory (safe if storage is unavailable) ---- */
   function load(k) { try { return JSON.parse(localStorage.getItem(k) || '{}') || {}; } catch (e) { return {}; } }
   function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  var loadedAt = Date.now();
   var seen = load('hk-en-seen');   // url -> time first scrolled past
   var read = load('hk-en-read');   // url -> {h: headline, t: time opened} (for follow-ups later)
-  Object.keys(seen).forEach(function (u) { if (now - seen[u] > 21 * DAY) delete seen[u]; });
-  Object.keys(read).forEach(function (u) { if (now - (read[u].t || 0) > 60 * DAY) delete read[u]; });
-  // A story counts as "already seen" if you scrolled past it at least 30 minutes ago.
-  function seenBefore(st) { return seen[st.url] && now - seen[st.url] > 30 * 60e3; }
+  Object.keys(seen).forEach(function (u) { if (loadedAt - seen[u] > 21 * DAY) delete seen[u]; });
+  Object.keys(read).forEach(function (u) { if (loadedAt - (read[u].t || 0) > 60 * DAY) delete read[u]; });
+  function seenBefore(st) { return seen[st.url] && loadedAt - seen[st.url] > 30 * 60e3; }
 
-  document.getElementById('edition-date').textContent = data.dateLabel + ' · ' + data.updated;
-  document.getElementById('glance').innerHTML = data.glance.map(function (g) {
-    return '<div><span class="lbl">' + esc(g.label) + '</span><span class="val ' + esc(g.trend || '') + '">' + esc(g.value) + '</span><span class="sub">' + esc(g.sub) + '</span></div>';
-  }).join('');
+  /* ---- glossary: always today's (it grows each day) ---- */
+  var glossary = today.glossary || {};
+  var terms = Object.keys(glossary).sort(function (a, b) { return b.length - a.length; });
+  var termRe = terms.length ? new RegExp('(^|[^A-Za-z])(' + terms.map(function (t) {
+    return esc(t).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }).join('|') + ')(?![A-Za-z])', 'gi') : null;
+  function findTerm(found) {
+    var low = found.toLowerCase();
+    for (var i = 0; i < terms.length; i++) if (esc(terms[i]).toLowerCase() === low) return terms[i];
+    return null;
+  }
+  // Underline the first mention of each glossary term within one story.
+  function linkify(text, used) {
+    var html = esc(text);
+    if (!termRe) return html;
+    return html.replace(termRe, function (m, pre, word) {
+      var key = findTerm(word);
+      if (!key || used[key]) return m;
+      used[key] = true;
+      return pre + '<span class="term" role="button" tabindex="0" data-term="' + esc(key) + '">' + word + '</span>';
+    });
+  }
 
-  var fresh = [], later = [];
-  data.stories.forEach(function (st) {
+  var nav = document.getElementById('sections');
+  var sizeCtl = nav.querySelector('.textsize');
+  var main = document.getElementById('stories');
+  var io = null, timers = new Map();
+
+  function card(st, opts) {
     var status = st.status || 'new';
-    if (status === 'earlier' || (status !== 'update' && seenBefore(st))) later.push(st); else fresh.push(st);
-  });
-
-  function isEnglish(st) { return st.source === 'The Standard'; }
-
-  function card(st, inGroup) {
-    var status = st.status || 'new';
-    var badge = inGroup ? '' : status === 'update' ? '<span class="badge update">Update</span>' : status === 'new' ? '<span class="badge new">New</span>' : '';
-    var more = (st.details && st.details.length) ? '<ul>' + st.details.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul>' : '';
+    var used = {};
+    var badge = (opts.plain || opts.inGroup) ? '' : status === 'update' ? '<span class="badge update">Update</span>' : status === 'new' ? '<span class="badge new">New</span>' : '';
+    var quotes = (st.quotes || []).slice(0, 2).map(function (q) {
+      return '<blockquote class="quote"><p>“' + esc(q.text) + '”</p><cite>' + esc(q.who) + '</cite></blockquote>';
+    }).join('');
+    var more = (st.details && st.details.length) ? '<ul>' + st.details.map(function (d) { return '<li>' + linkify(d, used) + '</li>'; }).join('') + '</ul>' : '';
+    var summary = linkify(st.summary, used);
+    var english = st.source === 'The Standard';
     return '<article class="story" data-url="' + esc(st.url) + '" data-h="' + esc(st.headline) + '">' +
       '<h3>' + esc(st.headline) + '</h3>' +
       '<div class="meta">' + badge + '<span class="src">' + esc(st.source) + '</span><span>' + esc(st.time) + '</span></div>' +
-      '<p>' + esc(st.summary) + '</p>' +
+      '<p>' + summary + '</p>' + quotes +
       '<details><summary>' + (more ? 'More detail' : 'Original report') + '</summary>' + more +
-        (isEnglish(st)
+        (english
           ? '<div class="orig"><a href="' + esc(st.url) + '" target="_blank" rel="noopener">Original report (English) ↗</a></div>'
           : '<div class="orig"><span>' + esc(st.zh) + '</span><a href="' + esc(st.url) + '" target="_blank" rel="noopener">Original report (Chinese) ↗</a></div>') +
       '</details>' +
     '</article>';
   }
 
-  var nav = document.getElementById('sections');
-  var sizeCtl = nav.querySelector('.textsize');
-  var main = document.getElementById('stories');
+  function render(data, isArchive) {
+    document.getElementById('edition-date').textContent = data.dateLabel + ' · ' + data.updated;
+    document.getElementById('glance').innerHTML = (data.glance || []).map(function (g) {
+      return '<div><span class="lbl">' + esc(g.label) + '</span><span class="val ' + esc(g.trend || '') + '">' + esc(g.value) + '</span><span class="sub">' + esc(g.sub) + '</span></div>';
+    }).join('');
 
-  data.sections.forEach(function (s) {
-    var items = fresh.filter(function (st) { return st.section === s.id; });
-    if (!items.length) return;
-    var a = document.createElement('a');
-    a.href = '#' + s.id; a.textContent = s.name;
-    nav.insertBefore(a, sizeCtl);
-    var sec = document.createElement('section');
-    sec.className = 'sec ' + s.id; sec.id = s.id;
-    sec.innerHTML = '<h2>' + esc(s.name) + '</h2>' + items.map(function (st) { return card(st, false); }).join('');
-    main.appendChild(sec);
-  });
+    nav.querySelectorAll('a').forEach(function (a) { a.remove(); });
+    main.innerHTML = '';
+    if (io) { io.disconnect(); timers.forEach(clearTimeout); timers.clear(); }
 
-  if (!fresh.length) {
-    main.innerHTML = '<div class="done"><strong>You\'re all caught up.</strong>Nothing new since your last visit. The next edition arrives at about 7:45 am.</div>';
+    var fresh = [], later = [];
+    data.stories.forEach(function (st) {
+      var status = st.status || 'new';
+      if (isArchive) { if (status !== 'earlier') fresh.push(st); return; }
+      if (status === 'earlier' || (status !== 'update' && seenBefore(st))) later.push(st); else fresh.push(st);
+    });
+
+    (data.sections || []).forEach(function (s) {
+      var items = fresh.filter(function (st) { return st.section === s.id; });
+      if (!items.length) return;
+      var a = document.createElement('a');
+      a.href = '#' + s.id; a.textContent = s.name;
+      nav.insertBefore(a, sizeCtl);
+      var sec = document.createElement('section');
+      sec.className = 'sec ' + s.id; sec.id = s.id;
+      sec.innerHTML = '<h2>' + esc(s.name) + '</h2>' + items.map(function (st) { return card(st, { plain: isArchive }); }).join('');
+      main.appendChild(sec);
+    });
+
+    if (!fresh.length) {
+      main.innerHTML = '<div class="done"><strong>You\'re all caught up.</strong>Nothing new since your last visit. The next edition arrives at about 7:45 am.</div>';
+    }
+
+    if (later.length) {
+      var g = document.createElement('details');
+      g.className = 'seen-group'; g.id = 'earlier';
+      g.innerHTML = '<summary>Already seen or from earlier (' + later.length + ')</summary>' +
+        data.sections.map(function (s) {
+          var items = later.filter(function (st) { return st.section === s.id; });
+          return items.length ? '<div class="seen-label" style="margin-top:1rem">' + esc(s.name) + '</div>' + items.map(function (st) { return card(st, { inGroup: true }); }).join('') : '';
+        }).join('');
+      main.appendChild(g);
+      var a2 = document.createElement('a');
+      a2.href = '#earlier'; a2.textContent = 'Earlier (' + later.length + ')';
+      a2.addEventListener('click', function () { g.open = true; });
+      nav.insertBefore(a2, sizeCtl);
+    }
+
+    var cu = document.getElementById('catchup');
+    var note = document.getElementById('archive-note');
+    if (isArchive) {
+      cu.hidden = true;
+      note.innerHTML = '<span>You\'re reading the edition from ' + esc(data.dateLabel) + '.</span><button type="button" id="back-today">Back to today</button>';
+      note.hidden = false;
+      document.getElementById('back-today').addEventListener('click', function () { show(today.date); });
+    } else {
+      note.hidden = true;
+      var nNew = fresh.filter(function (st) { return (st.status || 'new') === 'new'; }).length;
+      var nUpd = fresh.filter(function (st) { return st.status === 'update'; }).length;
+      if (fresh.length) {
+        cu.innerHTML = nNew + ' new ' + (nNew === 1 ? 'story' : 'stories') + (nUpd ? ' and ' + nUpd + ' ' + (nUpd === 1 ? 'update' : 'updates') : '') +
+          (later.length ? ' <span>· ' + later.length + ' seen or earlier ones are at the bottom</span>' : '');
+        cu.hidden = false;
+      } else cu.hidden = true;
+    }
+
+    var srcs = [];
+    data.stories.forEach(function (st) { if (srcs.indexOf(st.source) < 0) srcs.push(st.source); });
+    document.getElementById('sources-line').textContent = data.stories.length + ' stories in this edition from ' + srcs.join(', ') + '.';
+
+    // Only today's edition counts towards "already seen".
+    if (!isArchive && 'IntersectionObserver' in window) {
+      io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          var el = en.target;
+          if (en.isIntersecting) {
+            if (!timers.has(el)) timers.set(el, setTimeout(function () { markSeen(el); io.unobserve(el); timers.delete(el); }, 1500));
+          } else if (timers.has(el)) { clearTimeout(timers.get(el)); timers.delete(el); }
+        });
+      }, { threshold: 0.6 });
+      main.querySelectorAll('section.sec article.story').forEach(function (el) { io.observe(el); });
+    }
   }
 
-  if (later.length) {
-    var g = document.createElement('details');
-    g.className = 'seen-group'; g.id = 'earlier';
-    g.innerHTML = '<summary>Already seen or from earlier (' + later.length + ')</summary>' +
-      data.sections.map(function (s) {
-        var items = later.filter(function (st) { return st.section === s.id; });
-        return items.length ? '<div class="seen-label" style="margin-top:1rem">' + esc(s.name) + '</div>' + items.map(function (st) { return card(st, true); }).join('') : '';
-      }).join('');
-    main.appendChild(g);
-    var a2 = document.createElement('a');
-    a2.href = '#earlier'; a2.textContent = 'Earlier (' + later.length + ')';
-    a2.addEventListener('click', function () { g.open = true; });
-    nav.insertBefore(a2, sizeCtl);
+  /* ---- past editions (files published next to the page as editions/YYYY-MM-DD.json) ---- */
+  var cache = {}; cache[today.date] = today;
+  var past = document.getElementById('past');
+  var current = today.date;
+  function ymd(d) { return d.toISOString().slice(0, 10); }
+  function label(dateStr, i) {
+    if (i === 0) return 'Today';
+    var d = new Date(dateStr + 'T12:00:00Z');
+    return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', timeZone: 'UTC' });
   }
-
-  var nNew = fresh.filter(function (st) { return (st.status || 'new') === 'new'; }).length;
-  var nUpd = fresh.filter(function (st) { return st.status === 'update'; }).length;
-  var cu = document.getElementById('catchup');
-  if (fresh.length) {
-    cu.innerHTML = nNew + ' new ' + (nNew === 1 ? 'story' : 'stories') + (nUpd ? ' and ' + nUpd + ' ' + (nUpd === 1 ? 'update' : 'updates') : '') +
-      (later.length ? ' <span>· ' + later.length + ' seen or earlier ones are at the bottom</span>' : '');
-    cu.hidden = false;
+  var base = new Date(today.date + 'T12:00:00Z');
+  var buttons = {};
+  for (var i = 0; i < 8; i++) {
+    (function (i) {
+      var ds = ymd(new Date(base.getTime() - i * DAY));
+      var b = document.createElement('button');
+      b.type = 'button'; b.textContent = label(ds, i);
+      b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+      if (i > 0) b.hidden = true;   // shown once we know that edition exists
+      b.addEventListener('click', function () { show(ds); });
+      past.appendChild(b); buttons[ds] = b;
+      if (i > 0) {
+        fetch('editions/' + ds + '.json', { cache: 'no-cache' })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (j) { if (j && j.stories) { cache[ds] = j; b.hidden = false; } })
+          .catch(function () {});
+      }
+    })(i);
   }
-
-  var srcs = [];
-  data.stories.forEach(function (st) { if (srcs.indexOf(st.source) < 0) srcs.push(st.source); });
-  document.getElementById('sources-line').textContent = data.stories.length + ' stories in this edition from ' + srcs.join(', ') + '.';
+  function show(ds) {
+    if (!cache[ds]) return;
+    current = ds;
+    Object.keys(buttons).forEach(function (k) { buttons[k].setAttribute('aria-pressed', k === ds ? 'true' : 'false'); });
+    render(cache[ds], ds !== today.date);
+    window.scrollTo(0, 0);
+  }
 
   /* ---- remember what you scroll past and what you open ---- */
   var dirty = false;
   function markSeen(el) { var u = el.getAttribute('data-url'); if (u && !seen[u]) { seen[u] = Date.now(); dirty = true; } }
-  if ('IntersectionObserver' in window) {
-    var timers = new Map();
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        var el = en.target;
-        if (en.isIntersecting) {
-          if (!timers.has(el)) timers.set(el, setTimeout(function () { markSeen(el); io.unobserve(el); timers.delete(el); }, 1500));
-        } else if (timers.has(el)) { clearTimeout(timers.get(el)); timers.delete(el); }
-      });
-    }, { threshold: 0.6 });
-    main.querySelectorAll('section.sec article.story').forEach(function (el) { io.observe(el); });
-  }
   main.addEventListener('toggle', function (e) {
     var art = e.target.closest && e.target.closest('article.story');
-    if (art && e.target.open) { read[art.getAttribute('data-url')] = { h: art.getAttribute('data-h'), t: Date.now() }; markSeen(art); save('hk-en-read', read); }
+    if (art && e.target.open && current === today.date) { read[art.getAttribute('data-url')] = { h: art.getAttribute('data-h'), t: Date.now() }; markSeen(art); save('hk-en-read', read); }
   }, true);
   main.addEventListener('click', function (e) {
+    var t = e.target.closest && e.target.closest('.term');
+    if (t) { openTerm(t.getAttribute('data-term')); return; }
     var a = e.target.closest && e.target.closest('.orig a'); if (!a) return;
     var art = a.closest('article.story');
     read[art.getAttribute('data-url')] = { h: art.getAttribute('data-h'), t: Date.now() }; save('hk-en-read', read);
@@ -649,6 +799,23 @@ details.seen-group > summary { font-size: 1rem; color: var(--muted); }
   setInterval(function () { if (dirty) { save('hk-en-seen', seen); dirty = false; } }, 2000);
   window.addEventListener('pagehide', function () { save('hk-en-seen', seen); });
   document.addEventListener('visibilitychange', function () { if (document.hidden) save('hk-en-seen', seen); });
+
+  /* ---- explainer sheet ---- */
+  var sheet = document.getElementById('gloss-sheet'), lastTerm = null;
+  function openTerm(key) {
+    if (!glossary[key]) return;
+    document.getElementById('gloss-term').textContent = key;
+    document.getElementById('gloss-text').textContent = glossary[key];
+    sheet.hidden = false; lastTerm = document.activeElement;
+    document.getElementById('gloss-close').focus();
+  }
+  function closeTerm() { sheet.hidden = true; if (lastTerm && lastTerm.focus) lastTerm.focus(); }
+  document.getElementById('gloss-close').addEventListener('click', closeTerm);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !sheet.hidden) closeTerm();
+    var t = e.target.closest && e.target.closest('.term');
+    if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openTerm(t.getAttribute('data-term')); }
+  });
 
   /* ---- text size ---- */
   var sizes = [17, 19, 21, 23, 26], idx = 1;
@@ -660,5 +827,7 @@ details.seen-group > summary { font-size: 1rem; color: var(--muted); }
   document.getElementById('bigger').addEventListener('click', function () { if (idx < sizes.length - 1) { idx++; apply(); } });
   document.getElementById('smaller').addEventListener('click', function () { if (idx > 0) { idx--; apply(); } });
   apply();
+
+  render(today, false);
 })();
 </script>
